@@ -24,16 +24,21 @@ public class Event {
     @Column(name="created_date",columnDefinition = "timestamp default current_timestamp", updatable = false)
     private LocalDateTime created;
 
+    @ManyToOne
+    @JoinColumn(name="planning_id")
+    private Planning planning;
+
     public Event() {
     }
 
-    public Event(Integer id, String title, String message, LocalDateTime start_date, LocalDateTime end_date, LocalDateTime created) {
+    public Event(Integer id, String title, String message, LocalDateTime start_date, LocalDateTime end_date, LocalDateTime created, Planning planning) {
         this.id = id;
         this.title = title;
         this.message = message;
         this.start_date = start_date;
         this.end_date = end_date;
         this.created = created;
+        this.planning = planning;
     }
 
     public Integer getId() {
@@ -82,5 +87,13 @@ public class Event {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public Planning getPlanning() {
+        return planning;
+    }
+
+    public void setPlanning(Planning planning) {
+        this.planning = planning;
     }
 }
