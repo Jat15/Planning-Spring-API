@@ -2,7 +2,11 @@ package com.pie.planingapispring.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
+@Table(name = "plannings")
 public class Planning {
 
     @Id
@@ -11,7 +15,8 @@ public class Planning {
     private Integer id;
 
     // relation vers UserPlanning et vers events
-
+    @OneToMany(mappedBy = "planning")
+    private List<Event> events = new ArrayList<>();
 
 
     public Planning() {
@@ -24,5 +29,13 @@ public class Planning {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }
