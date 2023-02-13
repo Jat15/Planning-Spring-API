@@ -8,17 +8,17 @@ import java.util.Objects;
 
 @Embeddable
 public class UserPlanningId implements Serializable {
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private Integer userId;
-    @Column(name = "planing_id",nullable = false)
-    private Integer planingId;
+    @Column(name = "planning_id")
+    private Integer planningId;
 
     public UserPlanningId() {
     }
     
-    public UserPlanningId(Integer userId, Integer planingId) {
+    public UserPlanningId(Integer userId, Integer planningId) {
         this.userId = userId;
-        this.planingId = planingId;
+        this.planningId = planningId;
     }
 
     public Integer getUserId() {
@@ -29,12 +29,12 @@ public class UserPlanningId implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getPlaningId() {
-        return planingId;
+    public Integer getPlanningId() {
+        return planningId;
     }
 
-    public void setPlaningId(Integer planingId) {
-        this.planingId = planingId;
+    public void setPlanningId(Integer planningId) {
+        this.planningId = planningId;
     }
 
     @Override
@@ -42,11 +42,11 @@ public class UserPlanningId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserPlanningId that = (UserPlanningId) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(planingId, that.planingId);
+        return Objects.equals(userId, that.userId) && Objects.equals(planningId, that.planningId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, planingId);
+        return Objects.hash(userId, planningId);
     }
 }
