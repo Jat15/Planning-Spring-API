@@ -1,9 +1,9 @@
 package com.pie.planingapispring.repository;
 
-import com.pie.planingapispring.entity.User;
+import com.pie.planingapispring.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface EventRepository extends JpaRepository<Event, Integer> {
 }
