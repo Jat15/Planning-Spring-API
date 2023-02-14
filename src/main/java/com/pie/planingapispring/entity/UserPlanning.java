@@ -3,36 +3,62 @@ package com.pie.planingapispring.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="user_plannings")
+@Table(name="users_plannings")
 public class UserPlanning {
     @EmbeddedId
-    private UserPlanningId userPlanningId;
+    private UserPlanningId id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @MapsId("user_id")
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @MapsId("planning_id")
+    @JoinColumn(name = "planning_id")
+    private  Planning planning;
+
     @Enumerated(EnumType.ORDINAL)
-    private Rights rights;
+    @Column(name="user_planing_right", nullable = false)
+    private Rights right;
 
     public UserPlanning() {
     }
 
-    public UserPlanning(Integer userId, Integer planningId, Rights rights) {
-        this.userPlanningId = new UserPlanningId(userId, planningId);
-        this.rights = rights;
+    public UserPlanning(Integer userId, Integer planningId, Rights right) {
+        this.id = new UserPlanningId(userId, planningId);
+        this.right = right;
     }
 
-    public UserPlanningId getUserPlanningId() {
-        return userPlanningId;
+    public UserPlanningId getId() {
+        return id;
     }
 
-    public void setUserPlanningId(UserPlanningId userPlanningId) {
-        this.userPlanningId = userPlanningId;
+    public void setId(UserPlanningId id) {
+        this.id = id;
     }
 
-    public Rights getRights() {
-        return rights;
+    public User getUser() {
+        return user;
     }
 
-    public void setRights(Rights rights) {
-        this.rights = rights;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Planning getPlanning() {
+        return planning;
+    }
+
+    public void setPlanning(Planning planning) {
+        this.planning = planning;
+    }
+
+    public Rights getRight() {
+        return right;
+    }
+
+    public void setRight(Rights right) {
+        this.right = right;
     }
 }

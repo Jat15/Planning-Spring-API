@@ -1,5 +1,5 @@
 package com.pie.planingapispring.entity;
 
 public enum Rights {
-    UPDATE, MAIN, WRITE
+    UPDATE, MAIN, WRITE, READ
 }

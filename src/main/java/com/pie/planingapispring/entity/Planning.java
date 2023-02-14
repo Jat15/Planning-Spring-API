@@ -14,13 +14,13 @@ public class Planning {
     @Column(name = "planning_id")
     private Integer id;
 
-    // relation vers UserPlanning et vers events
     @OneToMany(mappedBy = "planning")
     private List<Event> events = new ArrayList<>();
 
+    @OneToMany(mappedBy = "planning", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserPlanning> usersPlannings = new ArrayList<>();
 
     public Planning() {
-
     }
 
     public Integer getId() {
