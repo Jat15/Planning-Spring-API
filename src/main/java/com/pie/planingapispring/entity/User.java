@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -56,8 +58,10 @@ public class User {
     @ManyToOne
     private Role role;
 
-    public User(){
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserPlanning> usersPlannings = new ArrayList<>();
 
+    public User(){
     }
     public int getId() {
         return id;
