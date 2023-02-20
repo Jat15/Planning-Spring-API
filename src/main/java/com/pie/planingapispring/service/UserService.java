@@ -1,7 +1,9 @@
 package com.pie.planingapispring.service;
 
+import com.pie.planingapispring.dto.ProfileDto;
 import com.pie.planingapispring.dto.UserDto;
 import com.pie.planingapispring.entity.User;
+import com.pie.planingapispring.mapper.ProfileMapper;
 import com.pie.planingapispring.mapper.UserMapper;
 import com.pie.planingapispring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,15 @@ public class UserService {
         UserDto userDto = UserMapper.toDto(user.get());
 
         return userDto;
+    }
+
+    public ProfileDto findProfileById(Integer id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+        ProfileDto profileDto = ProfileMapper.toDto(user.get());
+        return profileDto;
     }
 }

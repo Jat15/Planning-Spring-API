@@ -1,5 +1,6 @@
 package com.pie.planingapispring.controller;
 
+import com.pie.planingapispring.dto.ProfileDto;
 import com.pie.planingapispring.dto.UserDto;
 import com.pie.planingapispring.entity.User;
 import com.pie.planingapispring.mapper.UserMapper;
@@ -40,6 +41,17 @@ public class UserController {
         }
 
         return ResponseEntity.ok(user);
+    }
+
+    @RequestMapping("/profile/{id}")
+    public ResponseEntity<ProfileDto> fetchProfile(@PathVariable("id") Integer id) {
+        ProfileDto profile = userService.findProfileById(id);
+
+        if (profile == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(profile);
     }
 
 }
