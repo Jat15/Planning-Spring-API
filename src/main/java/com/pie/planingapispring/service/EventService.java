@@ -8,6 +8,7 @@ import com.pie.planingapispring.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,18 @@ public class EventService {
         }
 
         return EventMapper.toDto(event);
+    }
+
+    public List<EventDto> findAll() {
+        List<Event> events = eventRepository.findAll();
+
+        if (events.isEmpty()){
+            return null;
+        }
+        List<EventDto> eventsDto = events.stream()
+                .map(event -> EventMapper.toDto(event))
+                .toList();
+
+        return eventsDto;
     }
 }
