@@ -3,6 +3,7 @@ package com.pie.planingapispring.dto;
 public class PlanningDto {
     private Integer id;
     private String name;
+    private String right;
 
     public PlanningDto() {
     }
@@ -21,5 +22,12 @@ public class PlanningDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getRight() {
+        return right;
+    }
+
+    public void setRight(String right) {
+        this.right = right;
     }
 }
