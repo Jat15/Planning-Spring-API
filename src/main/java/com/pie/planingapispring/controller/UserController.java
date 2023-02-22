@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -40,9 +41,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping("/profile/{id}")
-    public ResponseEntity<ProfileDto> fetchProfile(@PathVariable("id") Integer id) {
-        ProfileDto profile = userService.findProfileById(id);
+    @RequestMapping("/profile")
+    public ResponseEntity<ProfileDto> fetchProfile(Principal principal) {
+        String email = principal.getName();
+        ProfileDto profile = userService.findProfileByEmail(email);
 
         if (profile == null) {
             return ResponseEntity.notFound().build();
@@ -61,5 +63,4 @@ public class UserController {
 
         return ResponseEntity.ok(usersSearched);
     }
-
 }

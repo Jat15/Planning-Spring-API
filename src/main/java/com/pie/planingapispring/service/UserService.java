@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.SimpleTimeZone;
 
 @Service
 public class UserService {
@@ -42,8 +43,8 @@ public class UserService {
         return userDto;
     }
 
-    public ProfileDto findProfileById(Integer id) {
-        Optional<User> user = userRepository.findById(id);
+    public ProfileDto findProfileByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
             return null;
