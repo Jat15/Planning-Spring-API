@@ -11,6 +11,7 @@ public class UserPlanningMapper {
 
         resultDto.setId(original.getId().getPlanningId());
         resultDto.setName(original.getPlanning().getName());
+        resultDto.setRight(original.getRight().name());
 
         return resultDto;
     }
