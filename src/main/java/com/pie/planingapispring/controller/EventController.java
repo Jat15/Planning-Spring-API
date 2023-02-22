@@ -11,13 +11,13 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/api/events")
+@RequestMapping(path="/api")
 public class EventController {
 
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/events/{id}")
     public ResponseEntity<EventDto> fetchById(@PathVariable("id") Integer id) {
         EventDto event = eventService.findById(id);
 
@@ -27,15 +27,12 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping
-    public ResponseEntity<List<EventDto>> fetchAll() {
-
-        List<EventDto> events = eventService.findAll();
-
+    @GetMapping("planning/{id}/events")
+    public ResponseEntity<List<EventDto>> fetchAllByPlanningId(@PathVariable("id") Integer planningId) {
+        List<EventDto> events = eventService.findAllByPlanningId(planningId);
         if(events == null){
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(events);
     }
 }

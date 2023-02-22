@@ -35,16 +35,16 @@ public class EventService {
         return EventMapper.toDto(event);
     }
 
-    public List<EventDto> findAll() {
-        List<Event> events = eventRepository.findAll();
-
+    public List<EventDto> findAllByPlanningId(Integer planningId) {
+        Integer userSessionID = 1;
+        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userSessionID, planningId);
+        if(userPlanningOpt.isEmpty()){
+            return null;
+        }
+        List<Event> events = eventRepository.findEventsByPlanningId(planningId);
         if (events.isEmpty()){
             return null;
         }
-        List<EventDto> eventsDto = events.stream()
-                .map(event -> EventMapper.toDto(event))
-                .toList();
-
-        return eventsDto;
+        return events.stream().map(EventMapper::toDto).toList();
     }
 }
