@@ -51,4 +51,17 @@ public class UserService {
         ProfileDto profileDto = ProfileMapper.toDto(user.get());
         return profileDto;
     }
+
+    public List<UserDto> searchUsers (String textEntry) {
+
+        List<UserDto> usersSearched = userRepository.findAllByPseudoContainingOrEmailContaining(textEntry, textEntry)
+                .stream()
+                .map(user -> UserMapper.toDto(user))
+                .toList();
+
+        if (usersSearched.isEmpty()) {
+            return null;
+        }
+        return usersSearched;
+    }
 }
