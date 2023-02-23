@@ -11,14 +11,15 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/userplanning")
 public class UserPlanningController {
     @Autowired
     public UserPlanningService userPlanningService;
 
-    @GetMapping("/api/plannings")
-    public ResponseEntity<List<PlanningRefactorDto>> fetchAll(Principal principal) {
+    @GetMapping("/myplannings")
+    public ResponseEntity<List<UserPlanningDto>> fetchAllMyPlannings(Principal principal) {
         String email = principal.getName();
-        List<PlanningRefactorDto> plannings = userPlanningService.all(email);
+        List<UserPlanningDto> plannings = userPlanningService.myPlannings(email);
 
         if (plannings == null) {
             return ResponseEntity.notFound().build();
@@ -26,7 +27,7 @@ public class UserPlanningController {
 
         return ResponseEntity.ok(plannings);
     }
-    @PostMapping("/api/userplanning")
+    @PostMapping
     public ResponseEntity<UserPlanningDto> createUserPlanning(Principal principal, @RequestBody UserPlanningCreateDto dto) {
         String email = principal.getName();
         UserPlanningDto link = userPlanningService.create(email, dto);
@@ -36,5 +37,16 @@ public class UserPlanningController {
         }
 
         return ResponseEntity.ok(link);
+    }
+    @GetMapping("/planningsshared")
+    public ResponseEntity<List<UserPlanningDto>> fetchPlanningsShared(Principal principal) {
+        String email = principal.getName();
+        List<UserPlanningDto> planningsShared = userPlanningService.planningShared(email);
+
+        if (planningsShared == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(planningsShared);
     }
 }

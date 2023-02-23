@@ -23,6 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(user.isEmpty()) {
             throw new UsernameNotFoundException("User Not Found");
         }
+        if (!user.get().isActivate()) {
+            throw new UsernameNotFoundException("User Not Activate");
+        }
 
         return new CustomUserDetails(user.get());
     }

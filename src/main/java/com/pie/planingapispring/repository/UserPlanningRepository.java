@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 public interface UserPlanningRepository extends JpaRepository<UserPlanning, UserPlanningId> {
     List<UserPlanning> findAllByUserId(int user_id);
-    Optional<UserPlanning> findUserPlanningByUserIdAndRight(int user_id, Rights right);
+    Optional<UserPlanning> findUserPlanningByUserIdAndRight(int userId, Rights right);
+    List<UserPlanning> findUserPlanningsByPlanningId(int planningId);
 }
