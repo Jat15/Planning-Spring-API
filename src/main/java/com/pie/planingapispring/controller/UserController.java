@@ -75,4 +75,16 @@ public class UserController {
                     .build();
         }
     }
+
+    //Fixme Gérée en patch ou put ou post avec angular
+    @GetMapping("/validate/{token}")
+    public ResponseEntity<UserDto> activateUser(@PathVariable String token) {
+        UserDto userActivate = userService.activateUser(token);
+
+        if (userActivate == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(userActivate);
+    }
 }
