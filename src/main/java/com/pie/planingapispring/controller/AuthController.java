@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -29,11 +32,14 @@ public class AuthController {
 
         String jwt = jwtUtils.generateJwtToken(auth);
 
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("token", jwt);
+
         return ResponseEntity
                 .ok()
                 .header(
                         HttpHeaders.AUTHORIZATION,
                         "Bearer " + jwt
-                ).body(jwt);
+                ).body(responseBody);
     }
 }
