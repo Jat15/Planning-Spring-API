@@ -19,19 +19,16 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public EventDto findById(Integer id) {
-        Integer userSessionID = 1;
+    public EventDto findById(Integer id, Integer userId) {
         Optional<Event> eventOpt = eventRepository.findById(id);
-
         if (eventOpt.isEmpty()) {
             return null;
         }
         Event event = eventOpt.get();
-        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userSessionID, event.getPlanning().getId());
+        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userId, event.getPlanning().getId());
         if(userPlanningOpt.isEmpty()){
             return null;
         }
-
         return EventMapper.toDto(event);
     }
 

@@ -21,8 +21,9 @@ public class EventController {
     private UserService userService;
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<EventDto> fetchById(@PathVariable("id") Integer id) {
-        EventDto event = eventService.findById(id);
+    public ResponseEntity<EventDto> fetchById(@PathVariable("id") Integer id, Principal userSession) {
+        User user = userService.findUserByEmail(userSession.getName());
+        EventDto event = eventService.findById(id, user.getId());
 
         if(event == null) {
             return ResponseEntity.notFound().build();
