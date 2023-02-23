@@ -5,7 +5,7 @@ import com.pie.planingapispring.entity.*;
 import com.pie.planingapispring.mapper.PlanningMapper;
 import com.pie.planingapispring.mapper.UserMapper;
 import com.pie.planingapispring.mapper.UserPlanningIdMapper;
-import com.pie.planingapispring.mapper.UserPlanningMapper;
+import com.pie.planingapispring.repository.PlanningRepository;
 import com.pie.planingapispring.repository.UserPlanningRepository;
 import com.pie.planingapispring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,12 @@ import java.util.Optional;
 
 @Service
 public class UserPlanningService {
-
     @Autowired
     private UserPlanningRepository userPlanningRepository;
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PlanningRepository planningRepository;
 
     public Optional<UserPlanning> findById(Integer userSessionID, Integer planningId) {
         return userPlanningRepository.findById(new UserPlanningId(userSessionID, planningId));
@@ -30,9 +30,24 @@ public class UserPlanningService {
     public List<UserPlanningDto> myPlannings(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) { return null; }
-
         List<UserPlanning> plannings = userPlanningRepository.findAllByUserId(user.get().getId());
-        if (plannings.isEmpty()) { return null; }
+
+        UserPlanning  createMain = null;
+        if (plannings.isEmpty()) {
+            createMain = createMain(user.get());
+        } else {
+            List<UserPlanning> filterByMain = plannings
+                    .stream()
+                    .filter(item -> item.getRight().equals(Rights.MAIN)).toList();
+
+            if (filterByMain.isEmpty()) {
+                createMain = createMain(user.get());
+            }
+        }
+        if (createMain != null) {
+            plannings.add(createMain);
+        }
+        if (plannings == null) { return null; }
 
         List<UserPlanningDto> planningRefactorDtos = plannings.stream()
                 .map(item -> {
@@ -47,6 +62,27 @@ public class UserPlanningService {
                 .toList();
 
         return planningRefactorDtos;
+    }
+
+    public UserPlanning createMain(User user) {
+        //Création d'un Planning MAIN si il n'existe pas
+        Planning planning = new Planning();
+        planning.setName("Planning of " + user.getPseudo());
+
+        planning = planningRepository.save(planning);
+        if (planning == null) { return null; }
+
+        UserPlanningId newUserPlanningId = new UserPlanningId(user.getId(), planning.getId());
+        UserPlanning newUserPlanning = new UserPlanning();
+        newUserPlanning.setId(newUserPlanningId);
+        newUserPlanning.setRight(Rights.MAIN);
+
+        UserPlanning saveUserPlanning = userPlanningRepository.save(newUserPlanning);
+        if (saveUserPlanning == null) { return null; }
+        saveUserPlanning.setUser(user);
+        saveUserPlanning.setPlanning(planning);
+
+        return  saveUserPlanning;
     }
 
     public UserPlanningDto create(String email, UserPlanningCreateDto dto) {
