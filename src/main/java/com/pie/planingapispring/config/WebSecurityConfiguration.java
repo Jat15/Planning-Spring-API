@@ -64,7 +64,12 @@ public class WebSecurityConfiguration{
                 .and();
 
         http.authorizeHttpRequests()
-                .requestMatchers("/api/auth/login", "/api/user/add").permitAll()
+                .requestMatchers(
+                        "/api/auth/login",
+                        "/api/users/create_user",
+                        "/api/users/validate/*",
+                        "/api/users/lostpassword"
+                ).permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(
