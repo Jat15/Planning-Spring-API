@@ -1,12 +1,11 @@
 package com.pie.planingapispring.dto;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-
-public class PlanningDto {
+public class PlanningRefactorDto {
     private Integer id;
     private String name;
+    private String right;
 
-    public PlanningDto() {
+    public PlanningRefactorDto() {
     }
 
     public Integer getId() {
@@ -23,5 +22,12 @@ public class PlanningDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getRight() {
+        return right;
+    }
+
+    public void setRight(String right) {
+        this.right = right;
     }
 }
