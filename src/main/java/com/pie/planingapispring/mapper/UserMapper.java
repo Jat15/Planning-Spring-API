@@ -2,8 +2,12 @@ package com.pie.planingapispring.mapper;
 
 import com.pie.planingapispring.dto.CreateUserDto;
 import com.pie.planingapispring.dto.UserDto;
+import com.pie.planingapispring.entity.Role;
 import com.pie.planingapispring.entity.User;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class UserMapper {
@@ -34,6 +38,11 @@ public class UserMapper {
         user.setCountry(dto.getCountry());
         user.setZip(dto.getZip());
 
+        Role role = new Role();
+        role.setId(1);
+        user.setRole(role);
+        user.setActivate(false);
+        user.setCreatedDate(LocalDateTime.now());
         return user;
     }
 }

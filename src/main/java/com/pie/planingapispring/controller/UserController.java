@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @PostMapping("/create_user")
-    public ResponseEntity<ProfileDto> addUser (CreateUserDto dto) {
+    public ResponseEntity<ProfileDto> addUser (@RequestBody CreateUserDto dto) {
         ProfileDto userCreated = userService.createUser(dto);
 
         if (userCreated != null) {
@@ -74,6 +74,5 @@ public class UserController {
                     .noContent()
                     .build();
         }
-
     }
 }
