@@ -22,6 +22,8 @@ public class UserPlanningService {
     private UserRepository userRepository;
     @Autowired
     private PlanningRepository planningRepository;
+    @Autowired
+    EmailServiceImpl emailService;
 
     public Optional<UserPlanning> findById(Integer userSessionID, Integer planningId) {
         return userPlanningRepository.findById(new UserPlanningId(userSessionID, planningId));
@@ -105,6 +107,23 @@ public class UserPlanningService {
 
         UserPlanning result = userPlanningRepository.save(userPlanning);
         if (result == null) { return null; }
+
+        try {
+            emailService.sendSimpleMessage(
+                    userLink.get().getEmail(),
+                    "Planning - " + user.get().getPseudo() + " vous partage son planning",
+                    "<html><body>" +
+                            "<p>Bonjour " + userLink.get().getFirstName() + " " + userLink.get().getLastName() + ",</p>" +
+                            "<p>L'utilisateur " + user.get().getPseudo() + " partage son planning avec vous.</p>" +
+                            "<p>Ce planning se nomme : " + planning.get().getPlanning().getName() + ".</p>" +
+                            "<p>Vous avez le droit : " + dto.getRight() + ".</p>" +
+                            "<p>Bonne journée à vous.</p>" +
+                            "</body></html>"
+
+            );
+        } catch (Exception e) {
+            System.err.println("L'email d'inscription n'a pas été envoyé");
+        }
 
         PlanningDto planningDto = PlanningMapper.toDto(planning.get().getPlanning());
         UserDto userDto = UserMapper.toDto(userLink.get());
