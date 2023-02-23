@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.SimpleTimeZone;
 
 @Service
 public class UserService {
@@ -42,13 +43,26 @@ public class UserService {
         return userDto;
     }
 
-    public ProfileDto findProfileById(Integer id) {
-        Optional<User> user = userRepository.findById(id);
+    public ProfileDto findProfileByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
             return null;
         }
         ProfileDto profileDto = ProfileMapper.toDto(user.get());
         return profileDto;
+    }
+
+    public List<UserDto> searchUsers (String textEntry) {
+
+        List<UserDto> usersSearched = userRepository.findAllByPseudoContainingOrEmailContaining(textEntry, textEntry)
+                .stream()
+                .map(user -> UserMapper.toDto(user))
+                .toList();
+
+        if (usersSearched.isEmpty()) {
+            return null;
+        }
+        return usersSearched;
     }
 }
