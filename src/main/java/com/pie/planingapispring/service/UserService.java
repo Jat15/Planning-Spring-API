@@ -68,6 +68,11 @@ public class UserService {
     }
 
     public ProfileDto createUser (CreateUserDto userToCreate) {
-        
+        User user = UserMapper.fromCreateUserDtoToEntity(userToCreate);
+        User userSaved = userRepository.save(user);
+        if (userSaved == null) {
+            return null;
+        }
+        return ProfileMapper.toDto(userSaved);
     }
 }
