@@ -1,8 +1,9 @@
 package com.pie.planingapispring.controller;
 
 import com.pie.planingapispring.dto.EventDto;
-import com.pie.planingapispring.dto.UserDto;
+import com.pie.planingapispring.entity.User;
 import com.pie.planingapispring.service.EventService;
+import com.pie.planingapispring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/events/{id}")
     public ResponseEntity<EventDto> fetchById(@PathVariable("id") Integer id) {
@@ -28,8 +31,9 @@ public class EventController {
     }
 
     @GetMapping("planning/{id}/events")
-    public ResponseEntity<List<EventDto>> fetchAllByPlanningId(@PathVariable("id") Integer planningId) {
-        List<EventDto> events = eventService.findAllByPlanningId(planningId);
+    public ResponseEntity<List<EventDto>> fetchAllByPlanningId(@PathVariable("id") Integer planningId, Principal userSession) {
+        User user = userService.findUserByEmail(userSession.getName());
+        List<EventDto> events = eventService.findAllByPlanningId(user.getId(), planningId);
         if(events == null){
             return ResponseEntity.notFound().build();
         }

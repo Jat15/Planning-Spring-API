@@ -35,9 +35,8 @@ public class EventService {
         return EventMapper.toDto(event);
     }
 
-    public List<EventDto> findAllByPlanningId(Integer planningId) {
-        Integer userSessionID = 1;
-        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userSessionID, planningId);
+    public List<EventDto> findAllByPlanningId(Integer userId, Integer planningId) {
+        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userId, planningId);
         if(userPlanningOpt.isEmpty()){
             return null;
         }
