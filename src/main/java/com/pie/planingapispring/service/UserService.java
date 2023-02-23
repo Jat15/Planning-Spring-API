@@ -1,5 +1,6 @@
 package com.pie.planingapispring.service;
 
+import com.pie.planingapispring.dto.CreateUserDto;
 import com.pie.planingapispring.dto.ProfileDto;
 import com.pie.planingapispring.dto.UserDto;
 import com.pie.planingapispring.entity.User;
@@ -64,5 +65,9 @@ public class UserService {
             return null;
         }
         return usersSearched;
+    }
+
+    public ProfileDto createUser (CreateUserDto userToCreate) {
+        
     }
 }
