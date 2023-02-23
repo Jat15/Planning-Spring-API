@@ -1,11 +1,11 @@
 package com.pie.planingapispring.dto;
 
-public class PlanningDto {
+public class PlanningRefactorDto {
     private Integer id;
     private String name;
     private String right;
 
-    public PlanningDto() {
+    public PlanningRefactorDto() {
     }
 
     public Integer getId() {
