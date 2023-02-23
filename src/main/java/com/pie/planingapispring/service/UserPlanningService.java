@@ -58,7 +58,6 @@ public class UserPlanningService {
         Optional<UserPlanning> planning = userPlanningRepository.findUserPlanningByUserIdAndRight(user.get().getId(), Rights.MAIN);
         if (planning.isEmpty()) { return null; }
 
-
         Optional<User> userLink = userRepository.findById(dto.getUserId());
         if (userLink.isEmpty()) { return null; }
 
@@ -107,5 +106,22 @@ public class UserPlanningService {
                 .toList();
 
         return planningRefactorDtos;
+    }
+    public String delete(String email,Integer idUser){
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) { return null; }
+
+        Optional<UserPlanning> planningMain = userPlanningRepository.findUserPlanningByUserIdAndRight(user.get().getId(), Rights.MAIN);
+        if (planningMain.isEmpty()) { return null; }
+
+        UserPlanningId id = new UserPlanningId(idUser, planningMain.get().getId().getPlanningId());
+
+        Optional<UserPlanning> userPlanning = userPlanningRepository.findById(id);
+        if (userPlanning.isEmpty()) { return null; }
+        if ("MAIN".equals(userPlanning.get().getRight().name())) { return null; }
+
+        userPlanningRepository.deleteById(id);
+
+        return "ok";
     }
 }
