@@ -27,17 +27,23 @@ public class UserPlanningService {
         return userPlanningRepository.findById(new UserPlanningId(userSessionID, planningId));
     }
 
-    public List<PlanningRefactorDto> all(String email) {
+    public List<UserPlanningDto> myPlannings(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-
         if (user.isEmpty()) { return null; }
 
         List<UserPlanning> plannings = userPlanningRepository.findAllByUserId(user.get().getId());
-
         if (plannings.isEmpty()) { return null; }
 
-        List<PlanningRefactorDto> planningRefactorDtos = plannings.stream()
-                .map(item -> UserPlanningMapper.userPlanningtoPlanningDto(item))
+        List<UserPlanningDto> planningRefactorDtos = plannings.stream()
+                .map(item -> {
+                    UserPlanningDto userPlanningDto = new UserPlanningDto();
+                    userPlanningDto.setPlanning(PlanningMapper.toDto(item.getPlanning()));
+                    userPlanningDto.setUser(UserMapper.toDto(item.getUser()));
+                    userPlanningDto.setId(UserPlanningIdMapper.toDto(item.getId()));
+                    userPlanningDto.setRight(item.getRight().name());
+
+                    return userPlanningDto;
+                })
                 .toList();
 
         return planningRefactorDtos;
@@ -76,5 +82,30 @@ public class UserPlanningService {
         userPlanningDto.setRight(result.getRight().name());
 
         return userPlanningDto;
+    }
+
+    public List<UserPlanningDto> planningShared(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) { return null; }
+
+        Optional<UserPlanning> planningMain = userPlanningRepository.findUserPlanningByUserIdAndRight(user.get().getId(), Rights.MAIN);
+        if (planningMain.isEmpty()) { return null; }
+
+        List<UserPlanning> planningsShared = userPlanningRepository.findUserPlanningsByPlanningId(planningMain.get().getPlanning().getId());
+        if (planningsShared.isEmpty()) { return null; }
+
+        List<UserPlanningDto> planningRefactorDtos = planningsShared.stream()
+                .map(item -> {
+                    UserPlanningDto userPlanningDto = new UserPlanningDto();
+                    userPlanningDto.setPlanning(PlanningMapper.toDto(item.getPlanning()));
+                    userPlanningDto.setUser(UserMapper.toDto(item.getUser()));
+                    userPlanningDto.setId(UserPlanningIdMapper.toDto(item.getId()));
+                    userPlanningDto.setRight(item.getRight().name());
+
+                    return userPlanningDto;
+                })
+                .toList();
+
+        return planningRefactorDtos;
     }
 }
