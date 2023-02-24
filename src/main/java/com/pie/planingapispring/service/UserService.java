@@ -5,10 +5,12 @@ import com.pie.planingapispring.dto.ProfileDto;
 import com.pie.planingapispring.dto.UserDto;
 import com.pie.planingapispring.entity.User;
 import com.pie.planingapispring.jwt.InscriptionJwt;
+import com.pie.planingapispring.jwt.LostPasswordJwt;
 import com.pie.planingapispring.mapper.ProfileMapper;
 import com.pie.planingapispring.mapper.UserMapper;
 import com.pie.planingapispring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public class UserService {
     EmailServiceImpl emailService;
     @Autowired
     InscriptionJwt inscriptionJwt;
+    @Autowired
+    LostPasswordJwt lostPasswordJwt;
     public List<UserDto> all() {
         List<User> users = userRepository.findAll();
 
@@ -73,6 +77,7 @@ public class UserService {
 
     public ProfileDto createUser (CreateUserDto userToCreate) {
         User user = UserMapper.fromCreateUserDtoToEntity(userToCreate);
+
         User userSaved = userRepository.save(user);
         if (userSaved == null) {
             return null;
@@ -109,6 +114,51 @@ public class UserService {
             if (user.isEmpty()) { return null; }
 
             user.get().setActivate(true);
+
+            User saveUser = userRepository.save(user.get());
+            if (saveUser == null) { return null; }
+
+            return UserMapper.toDto(saveUser);
+        }
+
+        return  null;
+    }
+
+    public String lostPassword(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) { return null; }
+
+        //fixme pour angular
+        String link = "http://localhost:8080"+"/lostpassword/"+ lostPasswordJwt.generateJwtToken(user.get().getEmail());
+
+        try {
+            emailService.sendSimpleMessage(
+                    user.get().getEmail(),
+                    "Planning - Mot de passe oublier",
+                    "<html><body>" +
+                            "<p>Bonjour " + user.get().getLastName() + " " + user.get().getFirstName() + ",</p>" +
+                            "<p>Voici le lien pour modifier votre mot de passe :</p>" +
+                            "<p><a href='" + link + "'>" + link + "</a></p>" +
+                            "<p>Si vous n'avez jamais demandé à changer votre mot de passe, veuillez nous contacter.</p>" +
+                            "<p>À bientôt !</p>" +
+                            "</body></html>"
+            );
+        } catch (Exception e) {
+            System.err.println("L'email de changement de mot passe n'a pas été envoyé");
+        }
+
+        return "ok";
+    }
+
+    public UserDto modifyPassword(String token, String password) {
+        if (lostPasswordJwt.validateToken(token)) {
+            String email = lostPasswordJwt.getEmailFromToken(token);
+
+            Optional<User> user = userRepository.findByEmail(email);
+            if (user.isEmpty()) { return null; }
+
+            String hashPassword = BCrypt.hashpw( password, BCrypt.gensalt());
+            user.get().setPassword(hashPassword);
 
             User saveUser = userRepository.save(user.get());
             if (saveUser == null) { return null; }
