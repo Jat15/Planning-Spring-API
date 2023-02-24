@@ -1,10 +1,9 @@
 package com.pie.planingapispring.controller;
 
+import com.pie.planingapispring.dto.CreateUserDto;
 import com.pie.planingapispring.dto.ProfileDto;
 import com.pie.planingapispring.dto.UserDto;
 import com.pie.planingapispring.entity.User;
-import com.pie.planingapispring.mapper.UserMapper;
-import com.pie.planingapispring.repository.UserRepository;
 import com.pie.planingapispring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +61,53 @@ public class UserController {
         }
 
         return ResponseEntity.ok(usersSearched);
+    }
+
+    @PostMapping("/create_user")
+    public ResponseEntity<ProfileDto> addUser (@RequestBody CreateUserDto dto) {
+        ProfileDto userCreated = userService.createUser(dto);
+
+        if (userCreated != null) {
+            return ResponseEntity
+                    .ok(userCreated);
+        } else {
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        }
+    }
+
+    //Fixme Gérée en patch ou put ou post avec angular
+    @GetMapping("/validate/{token}")
+    public ResponseEntity<UserDto> activateUser(@PathVariable String token) {
+        UserDto userActivate = userService.activateUser(token);
+
+        if (userActivate == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(userActivate);
+    }
+
+    @PostMapping("/lostpassword")
+    public ResponseEntity<?> lostPassword(@RequestParam String email) {
+        String userActivate = userService.lostPassword(email);
+
+        if (userActivate == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/modifypassword")
+    public ResponseEntity<UserDto> modifyPassword(@RequestParam String token, @RequestParam String password) {
+        UserDto userNewPassword = userService.modifyPassword(token, password);
+
+        if (userNewPassword == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(userNewPassword);
     }
 }

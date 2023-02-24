@@ -1,7 +1,6 @@
 package com.pie.planingapispring.controller;
 
 import com.pie.planingapispring.dto.*;
-import com.pie.planingapispring.entity.UserPlanning;
 import com.pie.planingapispring.service.UserPlanningService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +47,17 @@ public class UserPlanningController {
         }
 
         return ResponseEntity.ok(planningsShared);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> createUserPlanning(Principal principal, @PathVariable Integer id) {
+        String email = principal.getName();
+        String result = userPlanningService.delete(email, id);
+
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,10 +1,13 @@
 package com.pie.planingapispring.dto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
-public class ProfileDto {
-    private int id;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class CreateUserDto {
+
     private String pseudo;
     private String email;
     private String lastname;
@@ -12,25 +15,15 @@ public class ProfileDto {
     private String avatar;
     private LocalDate birthdate;
     private String phone;
-
-    private LocalDateTime createdDate;
-    private LocalDateTime modifyDate;
+    private String password;
 
     private String street;
     private String city;
     private String country;
     private String zip;
 
-    public ProfileDto(){
-    }
+    public CreateUserDto(){}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getPseudo() {
         return pseudo;
@@ -88,20 +81,12 @@ public class ProfileDto {
         this.phone = phone;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(LocalDateTime modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getStreet() {
