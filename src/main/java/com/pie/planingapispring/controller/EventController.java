@@ -53,4 +53,17 @@ public class EventController {
         }
         return ResponseEntity.ok(eventDto);
     }
+
+    @PutMapping("/planning/{id}/events/{event_id}")
+    public ResponseEntity<EventDto> createEvent(@RequestBody CreateEventDto createEventDto,
+                                                @PathVariable("id") Integer planningId,
+                                                @PathVariable("event_id") Integer eventId,
+                                                Principal userSession){
+        User user = userService.findUserByEmail(userSession.getName());
+        EventDto eventDto = eventService.EditEvent(createEventDto, planningId, eventId, user.getId());
+        if(eventDto == null){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(eventDto);
+    }
 }

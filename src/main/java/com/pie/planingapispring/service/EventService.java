@@ -56,4 +56,24 @@ public class EventService {
         Event eventCreated = eventRepository.save(eventToSave);
         return EventMapper.toDto(eventCreated);
     }
+
+    public EventDto EditEvent(CreateEventDto createEventDto, Integer planningId, Integer eventId, Integer userId) {
+        Optional<Event> eventOpt = eventRepository.findById(eventId);
+        if (eventOpt.isEmpty()) {
+            return null;
+        }
+        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userId, planningId);
+        if(userPlanningOpt.isEmpty()|| (!userPlanningOpt.get().getRight().equals(Rights.UPDATE) &&
+                !userPlanningOpt.get().getRight().equals(Rights.MAIN))) {
+            return null;
+        }
+        Event eventToEdit = eventOpt.get();
+        eventToEdit.setTitle(createEventDto.getTitle());
+        eventToEdit.setMessage(createEventDto.getMessage());
+        eventToEdit.setStart_date(createEventDto.getStart_date());
+        eventToEdit.setEnd_date(createEventDto.getEnd_date());
+        Event eventUpdated = eventRepository.save(eventToEdit);
+
+        return EventMapper.toDto(eventUpdated);
+    }
 }
