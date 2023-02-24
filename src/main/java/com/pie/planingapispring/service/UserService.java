@@ -75,6 +75,10 @@ public class UserService {
         return usersSearched;
     }
 
+    public User findUserByEmail(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        return userOpt.orElse(null);
+    }
     public ProfileDto createUser (CreateUserDto userToCreate) {
         User user = UserMapper.fromCreateUserDtoToEntity(userToCreate);
 
@@ -167,5 +171,6 @@ public class UserService {
         }
 
         return  null;
+
     }
 }
