@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/userplanning")
+@CrossOrigin("http://localhost:4200/")
 public class UserPlanningController {
     @Autowired
     public UserPlanningService userPlanningService;
