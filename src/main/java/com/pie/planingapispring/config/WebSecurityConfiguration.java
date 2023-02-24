@@ -68,7 +68,8 @@ public class WebSecurityConfiguration{
                         "/api/auth/login",
                         "/api/users/create_user",
                         "/api/users/validate/*",
-                        "/api/users/lostpassword"
+                        "/api/users/lostpassword",
+                        "/api/users/modifypassword"
                 ).permitAll()
                 .anyRequest().authenticated();
 
