@@ -1,26 +1,23 @@
-package com.pie.planingapispring.config;
+package com.pie.planingapispring.jwt;
 
-import com.pie.planingapispring.entity.CustomUserDetails;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
-public class JwtUtils {
+public class InscriptionJwt {
 
-    @Value("${jwt.auth.secret}")
+    @Value("${jwt.inscription.secret}")
     private String jwtSecret;
-    @Value("${jwt.auth.expiration.duration}")
+    @Value("${jwt.inscription.expiration.duration}")
     private long expirationMs;
 
-    public String generateJwtToken(Authentication authentication) {
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    public String generateJwtToken(String email) {
         return Jwts
                 .builder()
-                .setSubject(user.getUsername())
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + this.expirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -45,7 +42,7 @@ public class JwtUtils {
         return false;
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return Jwts
                 .parser()
                 .setSigningKey(jwtSecret)
