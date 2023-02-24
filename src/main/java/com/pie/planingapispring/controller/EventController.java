@@ -1,5 +1,6 @@
 package com.pie.planingapispring.controller;
 
+import com.pie.planingapispring.dto.CreateEventDto;
 import com.pie.planingapispring.dto.EventDto;
 import com.pie.planingapispring.entity.User;
 import com.pie.planingapispring.service.EventService;
@@ -31,7 +32,7 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("planning/{id}/events")
+    @GetMapping("/planning/{id}/events")
     public ResponseEntity<List<EventDto>> fetchAllByPlanningId(@PathVariable("id") Integer planningId, Principal userSession) {
         User user = userService.findUserByEmail(userSession.getName());
         List<EventDto> events = eventService.findAllByPlanningId(user.getId(), planningId);
@@ -39,5 +40,17 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(events);
+    }
+
+    @PostMapping("/planning/{id}/events")
+    public ResponseEntity<EventDto> createEvent(@RequestBody CreateEventDto createEventDto,
+                                                @PathVariable("id") Integer planningId,
+                                                Principal userSession){
+        User user = userService.findUserByEmail(userSession.getName());
+        EventDto eventDto = eventService.createEvent(createEventDto, planningId, user.getId());
+        if(eventDto == null){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(eventDto);
     }
 }

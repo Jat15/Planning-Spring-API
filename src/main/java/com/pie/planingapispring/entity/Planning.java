@@ -23,6 +23,10 @@ public class Planning {
     public Planning() {
     }
 
+    public Planning(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

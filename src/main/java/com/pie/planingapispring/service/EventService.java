@@ -1,7 +1,9 @@
 package com.pie.planingapispring.service;
 
+import com.pie.planingapispring.dto.CreateEventDto;
 import com.pie.planingapispring.dto.EventDto;
 import com.pie.planingapispring.entity.Event;
+import com.pie.planingapispring.entity.Rights;
 import com.pie.planingapispring.entity.UserPlanning;
 import com.pie.planingapispring.mapper.EventMapper;
 import com.pie.planingapispring.repository.EventRepository;
@@ -42,5 +44,16 @@ public class EventService {
             return null;
         }
         return events.stream().map(EventMapper::toDto).toList();
+    }
+
+    public EventDto createEvent(CreateEventDto createEventDto, Integer planningId, Integer userId) {
+        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userId, planningId);
+        if(userPlanningOpt.isEmpty() || (!userPlanningOpt.get().getRight().equals(Rights.WRITE) &&
+                !userPlanningOpt.get().getRight().equals(Rights.MAIN))) {
+            return null;
+        }
+        Event eventToSave = EventMapper.toEntity(createEventDto, planningId);
+        Event eventCreated = eventRepository.save(eventToSave);
+        return EventMapper.toDto(eventCreated);
     }
 }
