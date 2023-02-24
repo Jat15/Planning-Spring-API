@@ -57,7 +57,7 @@ public class EventService {
         return EventMapper.toDto(eventCreated);
     }
 
-    public EventDto EditEvent(CreateEventDto createEventDto, Integer planningId, Integer eventId, Integer userId) {
+    public EventDto editEvent(CreateEventDto createEventDto, Integer planningId, Integer eventId, Integer userId) {
         Optional<Event> eventOpt = eventRepository.findById(eventId);
         if (eventOpt.isEmpty()) {
             return null;
@@ -75,5 +75,19 @@ public class EventService {
         Event eventUpdated = eventRepository.save(eventToEdit);
 
         return EventMapper.toDto(eventUpdated);
+    }
+
+    public EventDto deleteEvent(Integer planningId, Integer eventId, Integer userId) {
+        Optional<Event> eventOpt = eventRepository.findById(eventId);
+        if (eventOpt.isEmpty()) {
+            return null;
+        }
+        Optional<UserPlanning> userPlanningOpt = userPlanningService.findById(userId, planningId);
+        if(userPlanningOpt.isEmpty()|| (!userPlanningOpt.get().getRight().equals(Rights.UPDATE) &&
+                !userPlanningOpt.get().getRight().equals(Rights.MAIN))) {
+            return null;
+        }
+        eventRepository.deleteById(eventId);
+        return EventMapper.toDto(eventOpt.get());
     }
 }

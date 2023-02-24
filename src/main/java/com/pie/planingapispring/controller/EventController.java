@@ -60,10 +60,22 @@ public class EventController {
                                                 @PathVariable("event_id") Integer eventId,
                                                 Principal userSession){
         User user = userService.findUserByEmail(userSession.getName());
-        EventDto eventDto = eventService.EditEvent(createEventDto, planningId, eventId, user.getId());
+        EventDto eventDto = eventService.editEvent(createEventDto, planningId, eventId, user.getId());
         if(eventDto == null){
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(eventDto);
+    }
+
+    @DeleteMapping("/planning/{id}/events/{event_id}")
+    public ResponseEntity<?> createEvent(@PathVariable("id") Integer planningId,
+                                                @PathVariable("event_id") Integer eventId,
+                                                Principal userSession){
+        User user = userService.findUserByEmail(userSession.getName());
+        EventDto eventDto = eventService.deleteEvent(planningId, eventId, user.getId());
+        if(eventDto == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
     }
 }
