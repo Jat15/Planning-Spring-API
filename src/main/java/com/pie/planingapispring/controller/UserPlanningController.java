@@ -51,7 +51,7 @@ public class UserPlanningController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> createUserPlanning(Principal principal, @PathVariable Integer id) {
+    public ResponseEntity<?> deleteUserPlanning(Principal principal, @PathVariable Integer id) {
         String email = principal.getName();
         String result = userPlanningService.delete(email, id);
 

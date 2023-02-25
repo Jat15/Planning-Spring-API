@@ -146,6 +146,7 @@ public class UserPlanningService {
         if (planningMain.isEmpty()) { return null; }
 
         List<UserPlanning> planningsShared = userPlanningRepository.findUserPlanningsByPlanningId(planningMain.get().getPlanning().getId());
+        planningsShared = planningsShared.stream().filter( item -> !item.getRight().name().equals("MAIN")).toList();
         if (planningsShared.isEmpty()) { return null; }
 
         List<UserPlanningDto> planningRefactorDtos = planningsShared.stream()
