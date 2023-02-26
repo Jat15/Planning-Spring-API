@@ -27,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDto> fetchAll(@PathVariable("id") Integer id) {
         UserDto user = userService.findById(id);
 
@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping("/profile")
+    @GetMapping("/profile")
     public ResponseEntity<ProfileDto> fetchProfile(Principal principal) {
         String email = principal.getName();
         ProfileDto profile = userService.findProfileByEmail(email);
@@ -50,10 +50,10 @@ public class UserController {
         return ResponseEntity.ok(profile);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<UserDto>> fetchResearch(@RequestParam String researched) {
+    @GetMapping("/search/{researched}")
+    public ResponseEntity<List<UserDto>> fetchResearch(@PathVariable String researched) {
         List<UserDto> usersSearched = userService.searchUsers(researched);
-        System.out.println(researched);
+
         if (usersSearched == null) {
             return ResponseEntity.notFound().build();
         }
@@ -75,9 +75,8 @@ public class UserController {
         }
     }
 
-    //Fixme Gérée en patch ou put ou post avec angular
-    @GetMapping("/validate/{token}")
-    public ResponseEntity<UserDto> activateUser(@PathVariable String token) {
+    @PatchMapping("/validate")
+    public ResponseEntity<UserDto> activateUser(@RequestBody String token) {
         UserDto userActivate = userService.activateUser(token);
 
         if (userActivate == null) {
@@ -88,7 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/lostpassword")
-    public ResponseEntity<?> lostPassword(@RequestParam String email) {
+    public ResponseEntity<?> lostPassword(@RequestBody String email) {
         String userActivate = userService.lostPassword(email);
 
         if (userActivate == null) {
