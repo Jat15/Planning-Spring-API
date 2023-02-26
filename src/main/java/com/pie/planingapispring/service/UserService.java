@@ -173,4 +173,18 @@ public class UserService {
         return  null;
 
     }
+
+    public ProfileDto modifyUser(String email, ModifyUserDto userDto) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) { return null; }
+
+        User userModify= UserMapper.userModifytoUser(userDto, user.get());
+
+        User userSave = userRepository.save(userModify);
+        if (userSave == null) { return null; }
+
+        ProfileDto profileDto = ProfileMapper.toDto(userSave);
+        return profileDto;
+
+    }
 }

@@ -111,4 +111,17 @@ public class UserController {
 
         return ResponseEntity.ok(userNewPassword);
     }
+
+    @PatchMapping("/modifyuser")
+    public ResponseEntity<ProfileDto> modifyUser(Principal principal,@RequestBody ModifyUserDto user) {
+        String email = principal.getName();
+        ProfileDto userNewPassword = userService.modifyUser(email, user);
+
+        if (userNewPassword == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(userNewPassword);
+    }
+
 }
