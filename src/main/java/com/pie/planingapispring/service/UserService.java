@@ -154,14 +154,14 @@ public class UserService {
         return "ok";
     }
 
-    public UserDto modifyPassword(String token, String password) {
-        if (lostPasswordJwt.validateToken(token)) {
-            String email = lostPasswordJwt.getEmailFromToken(token);
+    public UserDto modifyPassword(ModifyPasswordDto modifyPasswordDto) {
+        if (lostPasswordJwt.validateToken(modifyPasswordDto.getToken())) {
+            String email = lostPasswordJwt.getEmailFromToken(modifyPasswordDto.getToken());
 
             Optional<User> user = userRepository.findByEmail(email);
             if (user.isEmpty()) { return null; }
 
-            String hashPassword = BCrypt.hashpw( password, BCrypt.gensalt());
+            String hashPassword = BCrypt.hashpw( modifyPasswordDto.getPassword(), BCrypt.gensalt());
             user.get().setPassword(hashPassword);
 
             User saveUser = userRepository.save(user.get());
