@@ -1,9 +1,6 @@
 package com.pie.planingapispring.controller;
 
-import com.pie.planingapispring.dto.CreateUserDto;
-import com.pie.planingapispring.dto.ProfileDto;
-import com.pie.planingapispring.dto.UserDto;
-import com.pie.planingapispring.entity.User;
+import com.pie.planingapispring.dto.*;
 import com.pie.planingapispring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDto> fetchAll(@PathVariable("id") Integer id) {
         UserDto user = userService.findById(id);
 
@@ -41,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping("/profile")
+    @GetMapping("/profile")
     public ResponseEntity<ProfileDto> fetchProfile(Principal principal) {
         String email = principal.getName();
         ProfileDto profile = userService.findProfileByEmail(email);
@@ -53,10 +50,10 @@ public class UserController {
         return ResponseEntity.ok(profile);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<UserDto>> fetchResearch(@RequestParam String researched) {
+    @GetMapping("/search/{researched}")
+    public ResponseEntity<List<UserDto>> fetchResearch(@PathVariable String researched) {
         List<UserDto> usersSearched = userService.searchUsers(researched);
-        System.out.println(researched);
+
         if (usersSearched == null) {
             return ResponseEntity.notFound().build();
         }
@@ -78,9 +75,8 @@ public class UserController {
         }
     }
 
-    //Fixme Gérée en patch ou put ou post avec angular
-    @GetMapping("/validate/{token}")
-    public ResponseEntity<UserDto> activateUser(@PathVariable String token) {
+    @PatchMapping("/validate")
+    public ResponseEntity<UserDto> activateUser(@RequestBody String token) {
         UserDto userActivate = userService.activateUser(token);
 
         if (userActivate == null) {
@@ -91,7 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/lostpassword")
-    public ResponseEntity<?> lostPassword(@RequestParam String email) {
+    public ResponseEntity<?> lostPassword(@RequestBody String email) {
         String userActivate = userService.lostPassword(email);
 
         if (userActivate == null) {
@@ -102,8 +98,8 @@ public class UserController {
     }
 
     @PatchMapping("/modifypassword")
-    public ResponseEntity<UserDto> modifyPassword(@RequestParam String token, @RequestParam String password) {
-        UserDto userNewPassword = userService.modifyPassword(token, password);
+    public ResponseEntity<UserDto> modifyPassword(@RequestBody ModifyPasswordDto modifyPasswordDto) {
+        UserDto userNewPassword = userService.modifyPassword(modifyPasswordDto);
 
         if (userNewPassword == null) {
             return ResponseEntity.notFound().build();
