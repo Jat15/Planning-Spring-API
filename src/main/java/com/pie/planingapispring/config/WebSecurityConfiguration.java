@@ -62,7 +62,7 @@ public class WebSecurityConfiguration{
                 .requestMatchers(
                         "/api/auth/login",
                         "/api/users/create_user",
-                        "/api/users/validate/*",
+                        "/api/users/validate",
                         "/api/users/lostpassword",
                         "/api/users/modifypassword"
                 ).permitAll()
