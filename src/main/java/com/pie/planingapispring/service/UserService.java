@@ -1,8 +1,6 @@
 package com.pie.planingapispring.service;
 
-import com.pie.planingapispring.dto.CreateUserDto;
-import com.pie.planingapispring.dto.ProfileDto;
-import com.pie.planingapispring.dto.UserDto;
+import com.pie.planingapispring.dto.*;
 import com.pie.planingapispring.entity.User;
 import com.pie.planingapispring.jwt.InscriptionJwt;
 import com.pie.planingapispring.jwt.LostPasswordJwt;
@@ -58,6 +56,7 @@ public class UserService {
         if (user.isEmpty()) {
             return null;
         }
+
         ProfileDto profileDto = ProfileMapper.toDto(user.get());
         return profileDto;
     }
@@ -88,7 +87,8 @@ public class UserService {
         }
 
         //fixme trouver un moyen plus simple pour la racine
-        String link = "http://localhost:8080"+"/api/users/validate/"+ inscriptionJwt.generateJwtToken(user.getEmail());
+        String link = "http://localhost:4200/validate-account/"+ inscriptionJwt.generateJwtToken(user.getEmail());
+        System.out.println(link);
 
         try {
             emailService.sendSimpleMessage(
@@ -131,9 +131,9 @@ public class UserService {
     public String lostPassword(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) { return null; }
-
-        //fixme pour angular
-        String link = "http://localhost:8080"+"/lostpassword/"+ lostPasswordJwt.generateJwtToken(user.get().getEmail());
+        
+        String link = "http://localhost:4200/modify-password/"+ lostPasswordJwt.generateJwtToken(user.get().getEmail());
+        System.out.println(link);
 
         try {
             emailService.sendSimpleMessage(
