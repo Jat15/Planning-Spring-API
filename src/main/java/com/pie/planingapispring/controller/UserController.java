@@ -102,8 +102,8 @@ public class UserController {
     }
 
     @PatchMapping("/modifypassword")
-    public ResponseEntity<UserDto> modifyPassword(@RequestParam String token, @RequestParam String password) {
-        UserDto userNewPassword = userService.modifyPassword(token, password);
+    public ResponseEntity<UserDto> modifyPassword(@RequestBody ModifyPasswordDto modifyPasswordDto) {
+        UserDto userNewPassword = userService.modifyPassword(modifyPasswordDto);
 
         if (userNewPassword == null) {
             return ResponseEntity.notFound().build();
