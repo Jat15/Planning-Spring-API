@@ -70,8 +70,8 @@ public class EventService {
         Event eventToEdit = eventOpt.get();
         eventToEdit.setTitle(createEventDto.getTitle());
         eventToEdit.setMessage(createEventDto.getMessage());
-        eventToEdit.setStart_date(createEventDto.getStart_date());
-        eventToEdit.setEnd_date(createEventDto.getEnd_date());
+        eventToEdit.setStart_date(createEventDto.getStart());
+        eventToEdit.setEnd_date(createEventDto.getEnd());
         Event eventUpdated = eventRepository.save(eventToEdit);
 
         return EventMapper.toDto(eventUpdated);
