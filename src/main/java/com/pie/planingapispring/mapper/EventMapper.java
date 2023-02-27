@@ -25,8 +25,8 @@ public class EventMapper {
         Event event = new Event();
         event.setTitle(createEventDto.getTitle());
         event.setMessage(createEventDto.getMessage());
-        event.setStart_date(createEventDto.getStart_date());
-        event.setEnd_date(createEventDto.getEnd_date());
+        event.setStart_date(createEventDto.getStart());
+        event.setEnd_date(createEventDto.getEnd());
         event.setPlanning(new Planning(planningId));
         event.setCreated(LocalDateTime.now());
 
