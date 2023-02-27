@@ -15,8 +15,8 @@ public class EventMapper {
         eventDto.setId(event.getId());
         eventDto.setTitle(event.getTitle());
         eventDto.setMessage(event.getMessage());
-        eventDto.setStart_date(event.getStart_date());
-        eventDto.setEnd_date(event.getEnd_date());
+        eventDto.setStart(event.getStart_date());
+        eventDto.setEnd(event.getEnd_date());
 
         return eventDto;
     }

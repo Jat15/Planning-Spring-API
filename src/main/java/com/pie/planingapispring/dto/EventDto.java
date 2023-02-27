@@ -6,8 +6,8 @@ public class EventDto {
     private Integer id;
     private String title;
     private String message;
-    private LocalDateTime start_date;
-    private LocalDateTime end_date;
+    private LocalDateTime start;
+    private LocalDateTime end;
 
     public EventDto() {
     }
@@ -36,19 +36,19 @@ public class EventDto {
         this.message = message;
     }
 
-    public LocalDateTime getStart_date() {
-        return start_date;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setStart_date(LocalDateTime start_date) {
-        this.start_date = start_date;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
     }
 
-    public LocalDateTime getEnd_date() {
-        return end_date;
+    public LocalDateTime getEnd() {
+        return end;
     }
 
-    public void setEnd_date(LocalDateTime end_date) {
-        this.end_date = end_date;
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
     }
 }
